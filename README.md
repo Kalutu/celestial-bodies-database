@@ -68,7 +68,7 @@ INSERT INTO moon(name, type, size, has_atmosphere, planet_id) VALUES
     ('Moon', 'Terrestrial', 73400000000000000000000, false, 1),
     ('Luna', 'Terrestrial', 73490000000000000000000, false, 1),
     -- Add more rows as needed
-
+```
 ## Installation
 To create the "universe" database and tables, follow these steps:
 
@@ -78,7 +78,13 @@ To create the "universe" database and tables, follow these steps:
 4. Execute the script to create the database and tables.
 
 ## Usage
-
 After creating the "universe" database, you can use it to store and query information about galaxies, stars, planets, and moons in the universe.
+
+## Contributing
+Contributions are welcome! If you encounter any issues or have suggestions for improvements, please feel free to open an issue or submit a pull request.
+
+## Credits
+This project is part of the [FreeCodeCamp Relational Database Certification](https://www.freecodecamp.org/learn/relational-database/) course. It was completed as one of the required projects in the curriculum.
+
 
 
