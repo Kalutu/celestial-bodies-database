@@ -77,3 +77,8 @@ To create the "universe" database and tables, follow these steps:
 3. Copy and paste the SQL code from [`create_universe_database.sql`](create_universe_database.sql) into the query editor.
 4. Execute the script to create the database and tables.
 
+## Usage
+
+After creating the "universe" database, you can use it to store and query information about galaxies, stars, planets, and moons in the universe.
+
+
