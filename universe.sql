@@ -1,162 +1,125 @@
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
+-- Create the "universe" database
+CREATE DATABASE universe;
 
-DROP DATABASE universe;
+-- Connect to the "universe" database
+\connect universe;
 
-CREATE DATABASE universe WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'C.UTF-8' LC_CTYPE = 'C.UTF-8';
-
-ALTER DATABASE universe OWNER TO freecodecamp;
-
-\connect universe
-
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
-
-SET default_tablespace = '';
-
-SET default_table_access_method = heap;
-
-CREATE TABLE public.constellation (
-    constellation_id integer NOT NULL,
-    name character varying(255) NOT NULL,
-    abbreviation character varying(10) NOT NULL,
-    location text,
-    no_of_stars integer
+-- Create the "constellation" table
+CREATE TABLE constellation (
+    constellation_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    abbreviation VARCHAR(10) NOT NULL,
+    location TEXT,
+    no_of_stars INT
 );
 
-ALTER TABLE public.constellation OWNER TO freecodecamp;
-
-CREATE SEQUENCE public.constellation_constellation_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-ALTER TABLE public.constellation_constellation_id_seq OWNER TO freecodecamp;
-
-ALTER SEQUENCE public.constellation_constellation_id_seq OWNED BY public.constellation.constellation_id;
-
-CREATE TABLE public.galaxy (
-    galaxy_id integer NOT NULL,
-    name character varying(30) NOT NULL,
-    description text,
-    size numeric,
-    has_black_hole boolean NOT NULL,
-    distance_from_earth integer,
-    age_in_millions_of_years integer
+-- Create the "galaxy" table
+CREATE TABLE galaxy (
+    galaxy_id SERIAL PRIMARY KEY,
+    name VARCHAR(30) NOT NULL,
+    description TEXT,
+    size NUMERIC,
+    has_black_hole BOOLEAN NOT NULL,
+    distance_from_earth INT,
+    age_in_millions_of_years INT
 );
 
-ALTER TABLE public.galaxy OWNER TO freecodecamp;
-
-CREATE SEQUENCE public.galaxy_galaxy_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-ALTER TABLE public.galaxy_galaxy_id_seq OWNER TO freecodecamp;
-
-ALTER SEQUENCE public.galaxy_galaxy_id_seq OWNED BY public.galaxy.galaxy_id;
-
-CREATE TABLE public.moon (
-    moon_id integer NOT NULL,
-    name character varying(30) NOT NULL,
-    type character varying(100),
-    size numeric,
-    has_atmosphere boolean NOT NULL,
-    planet_id integer
+-- Create the "star" table
+CREATE TABLE star (
+    star_id SERIAL PRIMARY KEY,
+    name VARCHAR(30) NOT NULL,
+    type VARCHAR(100),
+    mass NUMERIC,
+    is_supernova BOOLEAN NOT NULL,
+    galaxy_id INT REFERENCES galaxy(galaxy_id)
 );
 
-ALTER TABLE public.moon OWNER TO freecodecamp;
-
-CREATE SEQUENCE public.moon_moon_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-ALTER TABLE public.moon_moon_id_seq OWNER TO freecodecamp;
-
-ALTER SEQUENCE public.moon_moon_id_seq OWNED BY public.moon.moon_id;
-
-CREATE TABLE public.planet (
-    planet_id integer NOT NULL,
-    name character varying(30) NOT NULL,
-    type character varying(100),
-    mass numeric,
-    has_water boolean NOT NULL,
-    star_id integer
+-- Create the "planet" table
+CREATE TABLE planet (
+    planet_id SERIAL PRIMARY KEY,
+    name VARCHAR(30) NOT NULL,
+    type VARCHAR(100),
+    mass NUMERIC,
+    has_water BOOLEAN NOT NULL,
+    star_id INT REFERENCES star(star_id)
 );
 
-ALTER TABLE public.planet OWNER TO freecodecamp;
-
-CREATE SEQUENCE public.planet_planet_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-ALTER TABLE public.planet_planet_id_seq OWNER TO freecodecamp;
-
-ALTER SEQUENCE public.planet_planet_id_seq OWNED BY public.planet.planet_id;
-
-CREATE TABLE public.star (
-    star_id integer NOT NULL,
-    name character varying(30) NOT NULL,
-    type character varying(100),
-    mass numeric,
-    is_supernova boolean NOT NULL,
-    galaxy_id integer
+-- Create the "moon" table
+CREATE TABLE moon (
+    moon_id SERIAL PRIMARY KEY,
+    name VARCHAR(30) NOT NULL,
+    type VARCHAR(100),
+    size NUMERIC,
+    has_atmosphere BOOLEAN NOT NULL,
+    planet_id INT REFERENCES planet(planet_id)
 );
 
-ALTER TABLE public.star OWNER TO freecodecamp;
+-- Insert data into the "constellation" table
+INSERT INTO constellation(name, abbreviation, location, no_of_stars)
+VALUES 
+    ('Orion', 'Ori', 'Cellestial-Equator', 7),
+    ('Leo', 'Leo', 'Cellestial-Equator', 5),
+    ('Crux', 'Cru', 'Southern Hemisphere', 5);
 
-CREATE SEQUENCE public.star_star_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+-- Insert data into the "galaxy" table
+INSERT INTO galaxy(name, description, size, has_black_hole, distance_from_earth, age_in_millions_of_years)
+VALUES
+    ('Milky Way', 'Our Home Galaxy', 100000, true, 26000, 13000),
+    ('Andromeda', 'Spiral Galaxy', 120000, false, 2200000, 14000),
+    ('Triangulum', 'Small Galaxy', 20000, false, 30000000, 12000),
+    ('Whirlpool', 'Interacting Galaxy', 5000, true, 2300000, 11000),
+    ('Sombrero', 'Edge-on Galaxy', 40000, false, 290000, 15000),
+    ('Cartwheel', 'Ring Galaxy', 35000, true, 2500000, 16000);
 
-ALTER TABLE public.star_star_id_seq OWNER TO freecodecamp;
+-- Insert data into the "star" table (one star for each galaxy)
+INSERT INTO star(name, type, mass, is_supernova, galaxy_id)
+VALUES
+    ('Sun', 'G-type main-sequence', 1989000000000000000000000000000, false, 1),
+    ('Alpha Centauri A', 'G-type main-sequence', 2190000000000000000000000000000, false, 2),
+    ('Alpha Centauri B', 'K-type main-sequence', 1700000000000000000000000000000, false, 3),
+    ('Sirius', 'A-type main-sequence', 2020000000000000000000000000000, false, 3),
+    ('Proxima Centauri', 'M-type main-sequence', 250000000000000000000000000000, false, 2),
+    ('Betelgeuse', 'Red supergiant', 77000000000000000000000000000000, false, 1);
 
-ALTER SEQUENCE public.star_star_id_seq OWNED BY public.star.star_id;
+-- Insert data into the "planet" table
+INSERT INTO planet(name, type, mass, has_water, star_id)
+VALUES
+    ('Earth', 'Terrestrial', 5927000000000000000000000, true, 1),
+    ('Mars', 'Terrestrial', 639000000000000000000000, false, 1),
+    ('Venus', 'Terrestrial', 4867000000000000000000000, false, 3),
+    ('Jupiter', 'Gas giant', 1898000000000000000000000000, false, 2),
+    ('Saturn', 'Gas giant', 568300000000000000000000000, false, 4),
+    ('Neptune', 'Ice giant', 102400000000000000000000000, true, 5),
+    ('Kepler-452b', 'Terrestrial', 3500000000000000000000000, true, 6),
+    ('Mercury', 'Terrestrial', 330110000000000000000000, false, 2),
+    ('Saturn II', 'Gas giant', 568300000000000000000000000, false, 4),
+    ('Uranus', 'Ice giant', 86810000000000000000000000, true, 5),
+    ('Kepler-62e', 'Terrestrial', 18500000000000000000000000, true, 6),
+    ('Gliese 876 d', 'Terrestrial', 5820000000000000000000000, true, 3),
+    ('55 Cancri f', 'Super-Earth', 9300000000000000000000000, false, 4);
 
-INSERT INTO public.constellation VALUES (1, 'Orion', 'Ori', 'Celestial Equator', 7);
-INSERT INTO public.constellation VALUES (2, 'Leo', 'Leo', 'Celestial Equator', 5);
-INSERT INTO public.constellation VALUES (3, 'Crux', 'Cru', 'Southern Hemisphere', 5);
+-- Insert data into the "moon" table
+INSERT INTO moon(name, type, size, has_atmosphere, planet_id)
+VALUES
+    ('Moon', 'Terrestrial', 73400000000000000000000, false, 1),
+    ('Luna', 'Terrestrial', 73490000000000000000000, false, 1),
+    ('Phobos', 'Rocky', 10659000000000000, false, 2),
+    ('Deimos', 'Rocky', 2400000000000000, false, 2),
+    ('Charon', 'Rocky', 1520000000000000000000, false, 5),
+    ('Io', 'Rocky', 89300000000000000000000, true, 5),
+    ('Ganymede', 'Ice', 149300000000000000000000, true, 3),
+    ('Europa', 'Ice', 48300000000000000000000, true, 3),
+    ('Titan', 'Ice', 21400000000000000000000, true, 9),
+    ('Rhea', 'Ice', 2300000000000000000000, true, 9),
+    ('Enceledas', 'Ice', 108000000000000000000, true, 9),
+    ('Callisto', 'Ice', 107590000000000000000000, false, 4),
+    ('Ceres', 'Dwarf', 930300000000000000000, false, 11),
+    ('Pluto', 'Dwarf', 13090000000000000000000, false, 12),
+    ('Haumea', 'Dwarf', 4006000000000000000000, false, 13),
+    ('Eris', 'Dwarf', 16460000000000000000000, false, 14),
+    ('Halimede', 'Rocky', 35000000000000000, false, 11),
+    ('Olympus', 'Rocky', 1.43916, false, 2),
+    ('Mimas', 'Ice', 37500000000000000000, false, 9),
+    ('Oberon', 'Ice', 3010000000000000000000, false, 9);
+    ('Umbriel', 'Ice', 1.27e21, false, 8);
 
-INSERT INTO public.galaxy VALUES (1, 'Milky Way', 'Our Home Galaxy', 100000, true, 26000, 13000);
-INSERT INTO public.galaxy VALUES (2, 'Andromeda', 'Spiral Galaxy', 120000, false, 2200000, 14000);
-INSERT INTO public.galaxy VALUES (3, 'Triangulum', 'Small Galaxy', 20000, false, 30000000, 12000);
-INSERT INTO public.galaxy VALUES (4, 'Whirlpool', 'Interacting Galaxy', 5000, true, 2300000, 11000);
-INSERT INTO public.galaxy VALUES (5, 'Sombrero', 'Edge-on Galaxy', 40000, false, 290000, 15000);
-INSERT INTO public.galaxy VALUES (6, 'Cartwheel', 'Ring Galaxy', 35000, true, 2500000, 16000);
-
-INSERT INTO public.moon VALUES (1, 'Moon', 'Terrestrial', 73400000000000000000000, false, 1);
-INSERT INTO public
