@@ -68,3 +68,12 @@ INSERT INTO moon(name, type, size, has_atmosphere, planet_id) VALUES
     ('Moon', 'Terrestrial', 73400000000000000000000, false, 1),
     ('Luna', 'Terrestrial', 73490000000000000000000, false, 1),
     -- Add more rows as needed
+
+## Installation
+To create the "universe" database and tables, follow these steps:
+
+1. Install [PostgreSQL](https://www.postgresql.org/) on your system if you haven't already.
+2. Open a database management tool (e.g., pgAdmin, MySQL Workbench).
+3. Copy and paste the SQL code from [`create_universe_database.sql`](create_universe_database.sql) into the query editor.
+4. Execute the script to create the database and tables.
+
