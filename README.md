@@ -10,7 +10,7 @@ This is a database named "universe" that represents celestial bodies such as gal
 - [Installation](#installation)
 - [Usage](#usage)
 - [Contributing](#contributing)
-- [License](#license)
+- [Credits](#credits)
 
 ## Database Schema
 
